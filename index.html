@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nmap Scanner</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f9;
+        }
+        textarea {
+            width: 100%;
+            height: 200px;
+            margin-top: 10px;
+            padding: 10px;
+            font-size: 14px;
+            background-color: #e8e8e8;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Nmap Web Scanner</h1>
+    <label for="target">Enter Target IP or Host:</label>
+    <input type="text" id="target" placeholder="e.g., 192.168.1.1">
+    <button onclick="runNmap()">Run Nmap</button>
+    <h3>Output:</h3>
+    <textarea id="output" readonly></textarea>
+
+    <script>
+        async function runNmap() {
+            const target = document.getElementById('target').value;
+
+            if (!target) {
+                alert("Please enter a target IP or hostname.");
+                return;
+            }
+
+            const response = await fetch('/scan', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ target }),
+            });
+
+            const result = await response.json();
+            document.getElementById('output').textContent = result.output || "No output received.";
+        }
+    </script>
+</body>
+</html>
